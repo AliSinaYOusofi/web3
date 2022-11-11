@@ -6,7 +6,6 @@ contract CustomErrors {
 
     function runCustomError(uint _withdrawAmount) public view {
         uint balance = address(this).balance;
-
-        if (balance)
+        revert InsufficientBalance({balance: 3, _withdrawAmount});
     }
 }
