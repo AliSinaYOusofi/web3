@@ -1,4 +1,4 @@
-pragma version ^0.8.17;
+pragma solidity <=0.8.17;
 
 contract Modifiers {
 
@@ -28,7 +28,7 @@ contract Modifiers {
 
 
     // using our modifiers in this function
-    function setOnwer(address _owner) public validAddress checkOnwer {
+    function setOnwer(address _owner) public validAddress(_owner) checkOnwer {
         owner = _owner;
     }
     modifier noRentrancyAttack() {

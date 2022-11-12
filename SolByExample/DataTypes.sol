@@ -1,4 +1,4 @@
-pragma solidity ^0.4.13;
+pragma solidity <=0.8.17;
 
 contract PrimitiveDataTypes {
     // primitive data types in sol are the following
@@ -8,7 +8,7 @@ contract PrimitiveDataTypes {
     // signed itegers
     int public previousAmount = -1; // can have negative values as well as positive
     int public nextAmount = 100000; // positive values;
-    address public myAddress = 0x2341234234234; // wallet address;
+    address public myAddress; // wallet address;
 
     // fixed size bytes and dynamic sized bytes which refer to an array
 
