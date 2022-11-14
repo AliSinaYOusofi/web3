@@ -1,5 +1,6 @@
 import {useState, createContext, useContext} from 'react';
 import Web3 from 'web3';
+import interactionContract  from '../utils/interactionContract';
 
 export const appContext = createContext({});
 
@@ -23,7 +24,7 @@ export const ContractProvider = ({children}) => {
                 const accounts = await web3.eth.getAccounts();
                 setAddress(accounts[0]);
 
-                setContract(web3);
+                setContract(interactionContract(web3)); // gives the insta to contract 
 
                 ethereum.on('accountsChanged', async () => {
                     let account = await web3.eth.getAccounts();
@@ -38,12 +39,22 @@ export const ContractProvider = ({children}) => {
         else {
             alert("not")
         }
-
-        console.log("not working")
     }
 
+    // the addUsers() function defined in the smart contract.
+    const addUser = async () => {
+        try {
+            await contract.methods.addUsers().send({
+                from: address,
+                gas: 3000000,
+                gasPrice: null
+            })
+        } catch (error) {
+            console.log(error);
+        }
+    }
 
-    return <appContext.Provider value={{connectWallet, address}}>{children}</appContext.Provider> 
+    return <appContext.Provider value={{connectWallet, address, addUser}}>{children}</appContext.Provider> 
 }
 
 export const useAppContext = () => {
