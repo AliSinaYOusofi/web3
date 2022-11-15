@@ -9,6 +9,8 @@ export const ContractProvider = ({children}) => {
     const [address, setAddress] = useState();
     const [contract, setContract] = useState();
     const [web3, setWeb3] = useState();
+    const [users, setUsers] = useState([]);
+    const [balance, setBalance] = useState(0);
    
     
     const connectWallet = async () => {
@@ -55,8 +57,35 @@ export const ContractProvider = ({children}) => {
     }
 
     // another function for getting the functions that sended eth to the contract.
+    const getUsers = async () => {
+        
+        try {
+            // the method name is getCurrentUsers() in our smart contract.
+            const users = await contract.methods.getCurrentUsers().call();
+            setUsers(users);
+        } catch (error) {
+            console.log(error);
+        }
 
-    return <appContext.Provider value={{connectWallet, address, addUser}}>{children}</appContext.Provider> 
+    }
+
+    const currentContractBalance = async () => {
+        try {
+            const balance = await contract.methods.getCurrentContractBalance().call();
+            setBalance(balance);
+        } catch (error) {
+            console.log(error);
+        }
+    }
+    return <appContext.Provider value={{
+                connectWallet, 
+                address, 
+                addUser,
+                getUsers,
+                balance
+            }}
+                >{children}
+                </appContext.Provider> 
 }
 
 export const useAppContext = () => {
