@@ -63,7 +63,7 @@ contract AdvancedLottery {
 
     // modifier to check the amount before adding them.
     modifier validAmount() {
-        require(msg.value >= 0.01 ether && msg.value <= 1 ether, "ether should be b/w 0-1 ether");
+        require(msg.value >= 1 ether && msg.value <= 10 ether, "ether should be b/w 1-10 ether");
         emit amountIsEnough(msg.value, "it's all good");
         _; // execute the remaining part
     }
@@ -71,7 +71,7 @@ contract AdvancedLottery {
     // adding user for the lottery
     function addLottes()  public payable validAddress validAmount returns(bool x) {
         lottes.push(payable(msg.sender));
-        lotteAmounts[owner] = msg.value; 
+        lotteAmounts[msg.sender] = msg.value;  // not lotteAmounts[msg.sender] = msg.value
         emit lotteryUserAdded(msg.value, msg.sender, "user was added");
         /*
             in here we can get the max eth provided by a specific account.
@@ -81,9 +81,9 @@ contract AdvancedLottery {
     }
 
     // functions to select highest eth paid by lotter(user);
+    // now this function works. replacing owner to msg.sender
     function selectHighestEthSentByUser() public  returns(uint){
         // will use loops instead of ifs
-      
         uint counter;
         for (counter = 0; counter < lottes.length; counter++) {
             if (lotteAmounts[lottes[counter]] > highestPaidByLotte) {
@@ -99,12 +99,15 @@ contract AdvancedLottery {
     */
     // getting the amount of money in this contract
     function getContractToalBalance() public view returns(uint) { return address(this).balance; }
-
     // getting number of lottes
     function getTotalLottes() public view returns(uint) { return lottes.length + 1;}
-
     // dum
-    function getDummy() public view returns(uint) {
-        return lotteAmounts[lottes[0]];
-    }
+    function getDummy() public view returns(uint) { return lotteAmounts[lottes[0]];}
+    function getLottesAddress() public view returns(address payable [] memory)  { return lottes; }
+
+    // now onto other functionalties
+
+    // TODO: secure random number.
+    // TODO: check the min and max number of addresses that has joined the ether.
+    // TODO: pick the winner and send the ether to his account.
 }
