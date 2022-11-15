@@ -1,3 +1,10 @@
+since i don't have enough goerli token
+i just will create everything
+without actually testing since it worked 
+when i tested in remix.
+
+#1 so hard to get goerli at this time
+
 This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 
 ## Getting Started
