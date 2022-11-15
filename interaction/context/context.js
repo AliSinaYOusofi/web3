@@ -54,6 +54,8 @@ export const ContractProvider = ({children}) => {
         }
     }
 
+    // another function for getting the functions that sended eth to the contract.
+
     return <appContext.Provider value={{connectWallet, address, addUser}}>{children}</appContext.Provider> 
 }
 
