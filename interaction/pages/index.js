@@ -2,6 +2,7 @@ import Head from 'next/head'
 import Image from 'next/image'
 import AddUser from '../components/AddUser'
 import Navigation from '../components/Navigation'
+import UsersTable from '../components/UsersTable'
 import { ContractProvider } from '../context/context'
 import styles from '../styles/Home.module.css'
 
@@ -16,6 +17,7 @@ export default function Home() {
       <ContractProvider>
         <Navigation />
         <AddUser />
+        <UsersTable />
       </ContractProvider>
     </div>
   )
