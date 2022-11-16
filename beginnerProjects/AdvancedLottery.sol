@@ -68,6 +68,12 @@ contract AdvancedLottery {
         _; // execute the remaining part
     }
 
+    // for the pickWinner function. only the owner can pick a winner
+    modifier isContractOwner() {
+        require(msg.sender == owner, "you are not the owner");
+        _;
+    }
+
     // adding user for the lottery
     function addLottes()  public payable validAddress validAmount returns(bool x) {
         lottes.push(payable(msg.sender));
@@ -110,4 +116,32 @@ contract AdvancedLottery {
     // TODO: secure random number.
     // TODO: check the min and max number of addresses that has joined the ether.
     // TODO: pick the winner and send the ether to his account.
+
+    // func: randomNumberGen;
+    function randomNumberGenerator() private view returns(uint) {
+        return uint(keccak256(abi.encodePacked(getContractToalBalance(), block.timestamp)));
+    }
+
+    // picking the winner
+    function PickWinner() public isContractOwner() {
+        uint randomIndex = randomNumberGenerator() % lottes.length;
+        (bool sent, ) = lottes[randomIndex].call{value: getContractToalBalance()}(""); // empty for fallback
+        require(sent, "failed to send");
+        lotteryCount++; // number of lottery played
+        resetMapping();
+        // reseting the values inside the mapping to zero when we have a winner
+        // sending all contract money to the owner
+    }
+
+    // for resting the mapping setting all the value sto zero
+    function resetMapping() private isContractOwner() {
+        
+        uint counter = 0;
+        
+        for (counter = 0; counter < lottes.length; counter++) {
+            lotteAmounts[lottes[counter]] = 0;
+        }
+        lottes = new address payable[](0);
+        // that it for this function
+    }
 }
