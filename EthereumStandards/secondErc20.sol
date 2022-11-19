@@ -1,12 +1,27 @@
 // SPDX-License-Identifier: MTI
 pragma solidity ^0.8.17;
 
+library ERC20SafeMath {
+    
+    function addition(uint256 a, uint256 b) public pure returns(uint256) {
+        uint256 result = a + b;
+        require(result >= a);
+        return result;
+    }
+
+
+    function sub(uint256 a, uint256 b) public pure returns(uint256) {
+        assert(a >= b);
+        return a - b;
+    }
+}
+
 contract erc20 {
 
     mapping (address => uint256) public balances;
     mapping(address => mapping(address => uint256)) allowedAmountsForDelegates;
 
-
+    using ERC20SafeMath for uint256;
     uint256 totalSupply_;
 
     string public constant name = "g-coin";
@@ -26,8 +41,8 @@ contract erc20 {
 
     function transfer(address to, uint tokenAmount) public returns(bool) {
         require(tokenAmount <= balances[msg.sender]);
-        balances[msg.sender] = balances[msg.sender] - tokenAmount;
-        balances[to] = balances[to] + tokenAmount;
+        balances[msg.sender] = balances[msg.sender].sub(tokenAmount);
+        balances[to] = balances[to].addition(tokenAmount);
         emit Transfer(to, msg.sender, tokenAmount);
         return true;
     }
@@ -46,10 +61,9 @@ contract erc20 {
         require(token <= balances[owner]);
         require(token <= allowedAmountsForDelegates[owner][delegate]);
         balances[owner] = balances[owner] - token;
-        allowedAmountsForDelegates[owner][delegate] = allowedAmountsForDelegates[owner][delegate] - token;
-        balances[delegate] = balances[delegate] + token;
+        allowedAmountsForDelegates[owner][delegate] = allowedAmountsForDelegates[owner][delegate].sub(token);
+        balances[delegate] = balances[delegate].addition(token);
         emit Transfer(msg.sender, delegate, token);
         return true;
-
     } 
 }
