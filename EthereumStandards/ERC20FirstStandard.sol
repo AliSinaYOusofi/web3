@@ -19,9 +19,6 @@ library SafeMath {
     }
 }
 
-
-
-
 contract ERC20 {
     
     // for security reasons
