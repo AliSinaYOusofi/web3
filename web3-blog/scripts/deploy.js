@@ -5,22 +5,20 @@
 // will compile your contracts, add the Hardhat Runtime Environment's members to the
 // global scope, and execute the script.
 const hre = require("hardhat");
+const fs = require("fs");
 
 async function main() {
-  const currentTimestampInSeconds = Math.round(Date.now() / 1000);
-  const ONE_YEAR_IN_SECS = 365 * 24 * 60 * 60;
-  const unlockTime = currentTimestampInSeconds + ONE_YEAR_IN_SECS;
+  const Blog = await hre.ethers.getContractFactory("Blog");
+  const blog = await Blog.deploy("Web3 Blog");
 
-  const lockedAmount = hre.ethers.utils.parseEther("1");
-
-  const Lock = await hre.ethers.getContractFactory("Lock");
-  const lock = await Lock.deploy(unlockTime, { value: lockedAmount });
-
-  await lock.deployed();
-
-  console.log(
-    `Lock with 1 ETH and unlock timestamp ${unlockTime} deployed to ${lock.address}`
-  );
+  await blog.deployed();
+  console.log("Blogger deployed");
+  
+  // this is for the managing of users who
+  // did this blog and owner
+  fs.writeFileSync("./config.js", `
+  export const contractAddress = "${blog.address}"
+  export const ownerAddress = "${blog.signer.address}"`); 
 }
 
 // We recommend this pattern to be able to use async/await everywhere
