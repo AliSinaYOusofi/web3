@@ -3,6 +3,7 @@ pragma solidity ^0.4.17;
 contract MappingNotIterable {
 
     mapping(address => uint) public balanceInAccount;
+    
     // a mapping of each address to the amount of that address
 
     // return the amount assocaited with an address
