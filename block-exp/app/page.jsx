@@ -2,17 +2,25 @@
 
 import React, { useState } from 'react'
 import Table from '../component/Table';
+import axios from 'axios';
 
 export default function page() {
 
   // everyting is good 
   const [blockNumber, setBlockNumber] = useState(null);
-  const handleSubmit = (e) => {
+  const [blockData, setBlockData] = useState([]);
+  
+  const handleSubmit = async (e) => {
     e.preventDefault();
-
-    if (! blockNumber) return;
     // sending to backend but check
     // check the limit should be 1-100 or a specific block number
+
+
+    try {
+      const repsonse = await axios.post("/api/info", { block: blockNumber});
+      setBlockData(previousData => [...previousData, ... new Set(repsonse.data.data)]);
+    } catch (error) { console.log(error)}
+
   }
 
   return (
@@ -29,7 +37,7 @@ export default function page() {
           </div>
           </form>
      </div>
-     <div className="w-[80%] mx-auto overflow-x-auto relative shadow-md sm:rounded-lg mt-10">
+     <div className="w-[98%] mx-auto overflow-x-auto relative shadow-md sm:rounded-lg mt-10">
             <table className="w-full text-sm text-left text-gray-500 dark:text-gray-400">
                 <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
                     <tr>
@@ -60,27 +68,51 @@ export default function page() {
                         <th scope="col" className="py-3 px-6">
                             parentHash
                         </th>
+                        <th>
+                          Action
+                        </th>
                     </tr>
                 </thead>
-                <tbody>
-                    <tr className="bg-white border-b dark:bg-gray-900 dark:border-gray-700">
-                        <th scope="row" className="py-4 px-6 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                            Apple MacBook Pro 17"
-                        </th>
-                        <td className="py-4 px-6">
-                            Sliver
-                        </td>
-                        <td className="py-4 px-6">
-                            Laptop
-                        </td>
-                        <td className="py-4 px-6">
-                            $2999
-                        </td>
-                        <td className="py-4 px-6">
-                            <a href="#" className="font-medium text-blue-600 dark:text-blue-500 hover:underline">Edit</a>
-                        </td>
-                    </tr>
-                </tbody>
+                {
+                  blockData.map( item => {
+                    return(
+                      <tbody className="text-xs">
+                        <tr className="bg-white border-b dark:bg-gray-900 dark:border-gray-700">
+                            <th scope="row" className="py-4 px-6 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                                {item?.blockNumber}
+                            </th>
+                            <td className="py-4 px-6">
+                                {item?.blockHash}
+                            </td>
+                            <td className="py-4 px-6">
+                                {item?.blockTimeStamp}
+                            </td>
+                            <td className="py-4 px-6">
+                                {item?.difficulty}
+                            </td>
+                            <td className="py-4 px-6">
+                                {item?.gasLimit}
+                            </td>
+                            <td className="py-4 px-6">
+                                {item?.gasUsed}
+                            </td>
+                            <td className="py-4 px-6">
+                                {item?.miner}
+                            </td>
+                            <td className="py-4 px-6">
+                                {item?.size}
+                            </td>
+                            <td className="py-4 px-6">
+                                {item?.parentHash}
+                            </td>
+                            <td className="py-4 px-6">
+                                <a href="#" className="font-medium text-blue-600 dark:text-blue-500 hover:underline">Edit</a>
+                            </td>
+                        </tr>
+                      </tbody>
+                    )
+                  })
+                }
             </table>
         </div>
     </div>

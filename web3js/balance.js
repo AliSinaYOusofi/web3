@@ -15,7 +15,7 @@ async function blockInfo() {
 
         blockInfoData[counter] = {
             blockNumber : currentBlock.number,
-            blockHash : (await currentBlock).hash,
+             blockHash : (await currentBlock).hash,
             blockTimeStamp : (await currentBlock).timestamp,
             difficulty: currentBlock.difficulty,
             gasLimit: await currentBlock.gasLimit,
