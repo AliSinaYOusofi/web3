@@ -1,5 +1,5 @@
 import React from 'react'
-
+import "../app/global.css";
 export default function Table() {
     return (
         <div className="overflow-x-auto relative shadow-md sm:rounded-lg mt-20">
